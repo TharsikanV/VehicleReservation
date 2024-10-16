@@ -10,10 +10,11 @@ const Dashboard = () => {
     useEffect(() => {
         const fetchReservations = async () => {
             const token = await getAccessToken();
+            console.log(token)
             const config = {
                 headers: { Authorization: `Bearer ${token}` }
             };
-            const response = await axios.get('http://localhost:5000/api/reservations', config);
+            const response = await axios.get('http://localhost:8000/api/reservations', config,{ withCredentials: true });
             setReservations(response.data);
         };
         fetchReservations();
@@ -24,7 +25,7 @@ const Dashboard = () => {
         const config = {
             headers: { Authorization: `Bearer ${token}` }
         };
-        await axios.delete(`http://localhost:5000/api/reservations/${id}`, config);
+        await axios.delete(`http://localhost:8000/api/reservations/${id}`, config);
         setReservations(reservations.filter(reservation => reservation.booking_id !== id));
     };
 

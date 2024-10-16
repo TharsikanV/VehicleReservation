@@ -3,7 +3,7 @@ const { createReservation, getReservations, deleteReservation } = require('../co
 const authenticate = require('../middleware/authMiddleware');
 const router = express.Router();
 
-router.post('/reserve', createReservation);
+router.post('/reserve', authenticate, createReservation);
 router.get('/reservations', authenticate, getReservations);
 router.delete('/reservations/:id', authenticate, deleteReservation);
 
