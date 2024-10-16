@@ -3,7 +3,7 @@ const Reservation = require('../models/Reservation');
 // Create a new reservation
 exports.createReservation = async (req, res) => {
     try {
-        const { date, time, location, vehicle_no, mileage, message } = req.body;
+        const { date, time, location, vehicle_no, mileage, message} = req.body;
         const username = req.user.username;
 
         const newReservation = await Reservation.create({
@@ -12,7 +12,7 @@ exports.createReservation = async (req, res) => {
         
         res.status(201).json(newReservation);
     } catch (error) {
-        res.status(500).json({ error: 'Server error' });
+        res.status(500).json({ error:error.message });
     }
 };
 
