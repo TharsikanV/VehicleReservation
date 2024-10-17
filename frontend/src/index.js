@@ -20,6 +20,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 // import { AsgardeoAuthProvider } from '@asgardeo/auth-react';
 import { AuthProvider } from "@asgardeo/auth-react";
+import './index.css'; // Ensure this line is present
 import App from './App';
 
 const authConfig = {
