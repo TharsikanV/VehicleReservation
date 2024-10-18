@@ -2,17 +2,18 @@ import React, { useEffect, useState } from 'react';
 import { useAuthContext } from "@asgardeo/auth-react";
 import Dashboard from './pages/Dashboard';
 
-
 const App = () => {
-    const { signIn, signOut, state,getDecodedIDToken } = useAuthContext();
-    const [userProfile,setUserProfile]=useState({
-        username:"",
-        name:"",
-        email:"",
-        country:"",
-        phone:""
+    const { signIn, signOut, state, getDecodedIDToken } = useAuthContext();
+    const [userProfile, setUserProfile] = useState({
+        username: "",
+        name: "",
+        email: "",
+        country: "",
+        phone: ""
     });
-    const fetchReservations = async () => {
+    const [isPopupVisible, setIsPopupVisible] = useState(false);
+
+    const fetchUserProfile = async () => {
         const user = await getDecodedIDToken();
         setUserProfile({
             username: user.username,
@@ -20,62 +21,69 @@ const App = () => {
             email: user.email,
             country: user.address?.country,
             phone: user.phone_number
-        })
-        
+        });
     };
+
     useEffect(() => {
-        if(state?.isAuthenticated){
-            fetchReservations();
+        if (state?.isAuthenticated) {
+            fetchUserProfile();
         }
-        
-        
-    }, []);
+    }, [state]);
+
+    const togglePopup = () => {
+        setIsPopupVisible(!isPopupVisible);
+    };
 
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100" style={{
-            backgroundImage: "url('https://png.pngtree.com/thumb_back/fh260/back_our/20190617/ourmid/pngtree-cute-children-s-drawing-style-car-rental-poster-board-vector-background-image_128984.jpg')",
-            backgroundSize: 'cover',
-            backgroundRepeat: 'no-repeat',
-            backgroundPosition: 'center',
-            minHeight: '100vh'
-        }}>
-            <h1 className="text-4xl font-bold mb-6">Vehicle Service Reservation</h1>
+        <div className="min-h-screen flex flex-col items-center bg-gray-100 relative">
+            <h1 className="text-3xl font-bold mt-10">Vehicle Service Reservation</h1>
 
             {!state?.isAuthenticated ? (
                 <>
-                <button
-                    onClick={() => signIn()}
-                    className="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow hover:bg-blue-700 transition duration-200"
-                >
-                    Login
-                </button> 
-                <button
-                    className="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow hover:bg-blue-700 transition duration-200 mt-5"
-                >
-                    <a href='https://asgardeo.io/signup?visitor_id=671116c2ac9c26.96522686&utm_source=site&utm_medium=organic' >Register</a>
-                </button> 
+                    <p className="text-lg text-center max-w-xl mx-auto text-gray-800 mt-10">
+                        Welcome to Vehicle Service Reservation – your one-stop solution for hassle-free vehicle service reservations! Book, manage, and track your vehicle’s maintenance appointments effortlessly and keep your car in top shape with just a few clicks.
+                    </p>
+                    <button
+                        onClick={() => signIn()}
+                        className="bg-blue-600 text-white py-2 px-4 rounded-lg shadow hover:bg-blue-700 transition my-10 mt-10"
+                    >
+                        Login with Asgardeo
+                    </button>
+                    <p className="text-md text-center text-gray-700 mt-4">
+                        Don't have an account?
+                    </p>
+                    <button className="bg-blue-600 text-white py-2 px-4 rounded-lg shadow hover:bg-blue-700 transition mt-5">
+                        <a href='https://asgardeo.io/signup'>Create Asgardeo Account</a>
+                    </button>
                 </>
-                       
-                
 
             ) : (
-                <div className="text-center">
-                    <p className="text-xl font-medium mb-4">Welcome, {userProfile.name}!</p>
-                    <p className="text-xl font-medium mb-4">User Name: {userProfile.username}</p>
-                    <p className="text-xl font-medium mb-4">Email: {userProfile.email}</p>
-                    <p className="text-xl font-medium mb-4">Phone Number: {userProfile.phone}</p>
-                    <p className="text-xl font-medium mb-4">Country: {userProfile.country}</p>
-                    <button
-                        onClick={() => signOut()}
-                        className="bg-red-600 text-white font-semibold py-2 px-4 rounded-lg shadow hover:bg-red-700 transition duration-200 mb-4"
-                    >
-                        Logout
+                <>
+                    <button onClick={togglePopup} className="bg-gray-300 text-black py-2 px-4 mt-4 rounded-lg shadow hover:bg-gray-400 transition">
+                        Profile
                     </button>
+                    {isPopupVisible && (
+                        <div className="absolute z-10 top-16 right-1/2 transform translate-x-1/2 bg-blue-100 p-5 rounded-lg shadow-lg w-80 mt-20">
+                            <h2 className="text-xl font-semibold">User Info</h2>
+                            <p className="text-lg">Welcome, {userProfile.name}!</p>
+                            <p className="text-lg">User: {userProfile.username}</p>
+                            <p className="text-lg">Email: {userProfile.email}</p>
+                            <p className="text-lg">Phone: {userProfile.phone}</p>
+                            <p className="text-lg">Country: {userProfile.country}</p>
+                            <button
+                                onClick={() => signOut()}
+                                className="bg-red-600 text-white py-2 px-4 rounded-lg shadow hover:bg-red-700 transition mt-4"
+                            >
+                                Logout
+                            </button>
+                        </div>
+                    )}
                     <Dashboard />
-                </div>
+                </>
             )}
         </div>
     );
 };
 
 export default App;
+

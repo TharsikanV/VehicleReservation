@@ -53,7 +53,7 @@ const ReservationForm = ({fetchReservations}) => {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="bg-white shadow-md rounded-lg p-6 space-y-4 max-w-lg mx-auto">
+        <form onSubmit={handleSubmit} className="flex-grow bg-white p-4 shadow-lg rounded-lg h-full ml-5">
             <h2 className="text-xl font-semibold text-center mb-4">Create a Reservation</h2>
             <label className="block">
                 <span className="text-gray-700">Service Date:</span>
@@ -124,7 +124,7 @@ const ReservationForm = ({fetchReservations}) => {
             </label>
             <button
                 type="submit"
-                className="w-full mt-4 bg-blue-600 text-white font-semibold py-2 rounded-md hover:bg-blue-700 transition duration-200"
+                className="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow hover:bg-blue-700 transition duration-200 mt-2"
             >
                 Submit
             </button>

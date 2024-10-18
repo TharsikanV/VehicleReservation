@@ -8,8 +8,7 @@ const Dashboard = () => {
     const { getAccessToken, state, getIDToken, getBasicUserInfo, getDecodedIDToken } = useAuthContext();
     const [reservations, setReservations] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const reservationsPerPage = 3;
-
+    const reservationsPerPage = 2;
     // Fetch reservations
     const fetchReservations = async () => {
         const token = await getAccessToken();
@@ -60,70 +59,65 @@ const Dashboard = () => {
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
     return (
-        <div className="container mx-auto p-10 h-screen w-full bg-gray-50">
+        <>
             {/* Flex container for side-by-side layout */}
-            <div className="flex flex-col lg:flex-row gap-20 w-full">
+            <div className="flex flex-col lg:flex-row w-full space-x-5 mr-10 ml-6 my-4">
 
                 {/* Reservation Form Section */}
-                <div className="flex-grow bg-white p-8 shadow-lg rounded-lg">
-                    <h2 className="text-xl font-semibold mb-4">Create a Reservation</h2>
-                    <ReservationForm fetchReservations={fetchReservations} />
-                </div>
+                    <ReservationForm  fetchReservations={fetchReservations}/>
 
                 {/* Reservations List Section */}
-                <div className="flex-grow bg-white p-8 shadow-lg rounded-lg">
-                    {reservations.length > 0 ? (
-                        <div className="space-y-6">
-                            <h2 className="text-xl font-semibold mb-4">Your Reservations</h2>
-                            <ul className="space-y-4">
-                                {currentReservations.map((reservation) => {
-                                    const currentDate = new Date(); // Get the current date
-                                    const reservationDate = new Date(reservation.date); // Convert reservation date to a Date object
+                {reservations.length > 0 ? (
+                    <div className="flex-grow bg-white p-8 shadow-lg rounded-lg h-fit mr-4">
+                        <h2 className="text-xl font-semibold mb-4 text-center">Your Reservations</h2>
+                        <ul className="space-y-4">
+                            {currentReservations.map((reservation) => {
+                                const currentDate = new Date(); // Get the current date
+                                const reservationDate = new Date(reservation.date); // Convert reservation date to a Date object
 
-                                    return (
-                                        <li key={reservation.booking_id} className="bg-gray-100 p-4 rounded-lg shadow-sm">
-                                            <div className="grid grid-cols-2 gap-4">
-                                                <p className="font-medium">Service Date:</p>
-                                                <p>{reservationDate.toLocaleDateString()}</p>
-                                                <p className="font-medium">Location:</p>
-                                                <p>{reservation.location}</p>
-                                                <p className="font-medium">Vehicle No:</p>
-                                                <p>{reservation.vehicle_no}</p>
-                                                <p className="font-medium">Mileage:</p>
-                                                <p>{reservation.mileage}</p>
-                                                <p className="font-medium">Message:</p>
-                                                <p>{reservation.message}</p>
-                                            </div>
+                                return (
+                                    <li key={reservation.booking_id} className="bg-gray-100 p-4 rounded-lg shadow-sm">
+                                        <div className="grid grid-cols-2">
+                                            <p className="font-medium">Service Date:</p>
+                                            <p>{reservationDate.toLocaleDateString()}</p>
+                                            <p className="font-medium">Location:</p>
+                                            <p>{reservation.location}</p>
+                                            <p className="font-medium">Vehicle No:</p>
+                                            <p>{reservation.vehicle_no}</p>
+                                            <p className="font-medium">Mileage:</p>
+                                            <p>{reservation.mileage}</p>
+                                            <p className="font-medium">Message:</p>
+                                            <p>{reservation.message}</p>
+                                        </div>
 
-                                            {/* Conditionally render the Delete button for future reservations */}
-                                            {reservationDate > currentDate ? (
-                                                <button
-                                                    onClick={() => deleteReservation(reservation.booking_id)}
-                                                    className="mt-4 w-full bg-red-500 text-white font-semibold py-2 px-4 rounded hover:bg-red-600"
-                                                >
-                                                    Delete
-                                                </button>
-                                            ) : (
-                                                <p className="mt-4 text-sm text-gray-500">Past reservations cannot be deleted.</p>
-                                            )}
-                                        </li>
-                                    );
-                                })}
-                            </ul>
+                                        {/* Conditionally render the Delete button for future reservations */}
+                                        {reservationDate > currentDate ? (
+                                            <button
+                                                onClick={() => deleteReservation(reservation.booking_id)}
+                                                className="mt-4 w-full bg-red-500 text-white font-semibold py-2 px-4 rounded hover:bg-red-600"
+                                            >
+                                                Delete
+                                            </button>
+                                        ) : (
+                                            <p className="mt-4 text-sm text-gray-500">Past reservations cannot be deleted.</p>
+                                        )}
+                                    </li>
+                                );
+                            })}
+                        </ul>
 
-                            <Pagination
-                                reservationsPerPage={reservationsPerPage}
-                                totalReservations={reservations.length}
-                                paginate={paginate}
-                                currentPage={currentPage}
-                            />
-                        </div>
-                    ) : (
-                        <p className="text-center text-gray-600">No reservations found.</p>
-                    )}
-                </div>
+                        <Pagination
+                            reservationsPerPage={reservationsPerPage}
+                            totalReservations={reservations.length}
+                            paginate={paginate}
+                            currentPage={currentPage}
+                        />
+                    </div>
+                ) : (
+                    <p className="text-center text-gray-600">No reservations found.</p>
+                )}
             </div>
-        </div>
+        </>
     );
 };
 
