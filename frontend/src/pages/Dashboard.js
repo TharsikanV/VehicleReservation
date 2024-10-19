@@ -10,18 +10,7 @@ const Dashboard = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const reservationsPerPage = 2;
     // Fetch reservations
-    const fetchReservations = async () => {
-        const token = await getAccessToken();
-        const IDtoken = await getIDToken();
-        const userInfo = await getBasicUserInfo();
-        const user = await getDecodedIDToken();
-        console.log(token);
-        console.log(IDtoken);
-        console.log(userInfo);
-        console.log(user.address.country);
-        const config = {
-            headers: { Authorization: `Bearer ${IDtoken}` }
-        };
+    const fetchReservations = async () => {   
         try {
             const response = await axios.get('http://localhost:8000/api/reservations', {
                 params: { username: state?.username },
